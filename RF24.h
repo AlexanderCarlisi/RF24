@@ -15,6 +15,16 @@
 #ifndef RF24_H_
 #define RF24_H_
 
+
+///
+/// ERROR VALUES FOR BEGIN func
+///
+#define RF24_BEGIN_ERROR_CE_INVALID_PIN 0
+#define RF24_BEGIN_ERROR_CSN_INVALID_PIN 1
+#define RF24_BEGIN_ERROR_INIT_RADIO_BAD_CONFIG 2
+#define RF24_BEGIN_SUCCESS 3
+
+
 #include "RF24_config.h"
 
 #if defined(RF24_LINUX) || defined(LITTLEWIRE)
@@ -284,7 +294,7 @@ public:
      * - `true` if the radio was successfully initialized
      * - `false` if the MCU failed to communicate with the radio hardware
      */
-    bool begin(void);
+    int begin(void);
 
 #if defined(RF24_SPI_PTR) || defined(DOXYGEN_FORCED)
     /**
@@ -1411,6 +1421,13 @@ public:
      * @return true if this is a legitimate radio
      */
     bool isValid();
+    
+    /**
+     * @brief @see isValid, but its better.
+     *
+     * @return a better datatype than @see isValid
+     */
+    int betterIsValid();
 
     /**
      * Close a pipe after it has been previously opened.
@@ -2065,7 +2082,7 @@ private:
     /**
      * initialize the GPIO pins
      */
-    bool _init_pins();
+    int _init_pins();
 
     /**
      * Set chip select pin

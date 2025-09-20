@@ -970,7 +970,7 @@ bool RF24::begin(rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
 
 /****************************************************************************/
 
-bool RF24::begin(void)
+int RF24::begin(void)
 {
 #if defined(RF24_LINUX)
     #if defined(RF24_RPi)
@@ -1005,17 +1005,25 @@ bool RF24::begin(void)
     #endif // !defined(RF24_SPI_PTR)
 
 #endif // !defined(XMEGA_D3) && !defined(RF24_LINUX)
-
-    return _init_pins() && _init_radio();
+    int success = _init_pins();
+    if (success != RF24_BEGIN_SUCCESS) {
+        return success;
+    }
+    bool initRadio = _init_radio();
+    if (!initRadio) {
+        return RF24_BEGIN_ERROR_INIT_RADIO_BAD_CONFIG;
+    }
+    return RF24_BEGIN_SUCCESS;
 }
 
 /****************************************************************************/
 
-bool RF24::_init_pins()
+int RF24::_init_pins()
 {
-    if (!isValid()) {
+    int valid = isValid()
+    if (valid != RF24_BEGIN_SUCCESS) {
         // didn't specify the CSN & CE pins to c'tor nor begin()
-        return false;
+        return valid;
     }
 
 #if defined(RF24_LINUX)
@@ -1052,7 +1060,7 @@ bool RF24::_init_pins()
     #endif
 #endif // !defined(XMEGA_D3) && !defined(LITTLEWIRE) && !defined(RF24_LINUX)
 
-    return true; // assuming pins are connected properly
+    return RF24_BEGIN_SUCCESS; // assuming pins are connected properly
 }
 
 /****************************************************************************/
@@ -1137,6 +1145,12 @@ bool RF24::isChipConnected()
 bool RF24::isValid()
 {
     return ce_pin != RF24_PIN_INVALID && csn_pin != RF24_PIN_INVALID;
+}
+
+int RF24::betterIsValid() {
+    if (ce_pin == RF24_PIN_INVALID) return RF24_BEGIN_ERROR_CE_INVALID_PIN;
+    else if (csn_pin == RF24_PIN_INVALID) return RF24_BEGIN_ERROR_CSN_INVALID_PIN;
+    return RF24_BEGIN_SUCCESS;
 }
 
 /****************************************************************************/
