@@ -1020,7 +1020,7 @@ int RF24::begin(void)
 
 int RF24::_init_pins()
 {
-    int valid = isValid()
+    int valid = isValid();
     if (valid != RF24_BEGIN_SUCCESS) {
         // didn't specify the CSN & CE pins to c'tor nor begin()
         return valid;
