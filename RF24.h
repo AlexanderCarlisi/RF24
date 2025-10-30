@@ -312,7 +312,7 @@ public:
      *
      * @return same result as begin()
      */
-    bool begin(_SPI* spiBus);
+    int begin(_SPI* spiBus);
 
     /**
      * Same as begin(), but allows dynamically specifying a SPI bus, CE pin,
@@ -336,7 +336,7 @@ public:
      *
      * @return same result as begin()
      */
-    bool begin(_SPI* spiBus, rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin);
+    int begin(_SPI* spiBus, rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin);
 #endif // defined (RF24_SPI_PTR) || defined (DOXYGEN_FORCED)
 
     /**
@@ -348,7 +348,7 @@ public:
      * is not supported. This means that the Due's pins 4, 10, or 52 are not mandated options (can use any digital output pin) for the radio's CSN pin.
      * @return same result as begin()
      */
-    bool begin(rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin);
+    int begin(rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin);
 
     /**
      * Checks if the chip is connected to the SPI bus

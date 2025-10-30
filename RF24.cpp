@@ -942,7 +942,7 @@ void RF24::encodeRadioDetails(uint8_t* encoded_details)
 #if defined(RF24_SPI_PTR) || defined(DOXYGEN_FORCED)
 // does not apply to RF24_LINUX
 
-bool RF24::begin(_SPI* spiBus)
+int RF24::begin(_SPI* spiBus)
 {
     _spi = spiBus;
     return _init_pins() && _init_radio();
@@ -950,7 +950,7 @@ bool RF24::begin(_SPI* spiBus)
 
 /****************************************************************************/
 
-bool RF24::begin(_SPI* spiBus, rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
+int RF24::begin(_SPI* spiBus, rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
 {
     ce_pin = _cepin;
     csn_pin = _cspin;
@@ -961,7 +961,7 @@ bool RF24::begin(_SPI* spiBus, rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
 
 /****************************************************************************/
 
-bool RF24::begin(rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
+int RF24::begin(rf24_gpio_pin_t _cepin, rf24_gpio_pin_t _cspin)
 {
     ce_pin = _cepin;
     csn_pin = _cspin;
@@ -1020,7 +1020,7 @@ int RF24::begin(void)
 
 int RF24::_init_pins()
 {
-    int valid = isValid()
+    int valid = betterIsValid();
     if (valid != RF24_BEGIN_SUCCESS) {
         // didn't specify the CSN & CE pins to c'tor nor begin()
         return valid;
